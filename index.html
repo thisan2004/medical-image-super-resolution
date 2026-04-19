@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Medical Image Super Resolution</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVIGATION BAR -->
+  <div class="navbar">
+    <div class="logo">Med<span>SR</span></div>
+    <button class="nav-btn active" onclick="showTab('home',this)">Home</button>
+    <button class="nav-btn" onclick="showTab('original',this)">Original</button>
+    <button class="nav-btn" onclick="showTab('vit',this)">Vision Transformer</button>
+    <button class="nav-btn" onclick="showTab('diffusion',this)">Diffusion Model</button>
+    <button class="nav-btn" onclick="showTab('combined',this)">ViT + Diffusion</button>
+    <button class="nav-btn" onclick="showTab('compare',this)">Compare All</button>
+  </div>
+
+  <div class="main">
+
+    <!-- UPLOAD SECTION -->
+    <div class="upload-card">
+      <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+        <input type="file" id="fileInput" accept="image/*" style="display:none" onchange="handleFile(event)">
+        <p class="big" id="uploadText">Click to Upload Medical Image</p>
+        <p class="small">MRI Brain &nbsp;·&nbsp; Chest X-Ray &nbsp;·&nbsp; CT Scan &nbsp;·&nbsp; Retinal Scan</p>
+      </div>
+      <div class="controls">
+        <div>
+          <div class="ctrl-label">Scale Factor</div>
+          <select class="ctrl-select" id="scaleSelect">
+            <option value="2">2x Upscale</option>
+            <option value="4" selected>4x Upscale</option>
+            <option value="8">8x Upscale</option>
+          </select>
+        </div>
+        <div>
+          <div class="ctrl-label">Image Type</div>
+          <select class="ctrl-select" id="typeSelect">
+            <option>Auto Detect</option>
+            <option>MRI Brain</option>
+            <option>Chest X-Ray</option>
+            <option>CT Scan</option>
+            <option>Retinal Scan</option>
+          </select>
+        </div>
+        <button class="run-btn" id="runBtn" onclick="runAll()" disabled>Run All Models</button>
+      </div>
+    </div>
+
+    <!-- PROGRESS BAR -->
+    <div class="progress-card" id="progressCard">
+      <div class="prog-title">Processing with All Models...</div>
+      <div class="bar-bg"><div class="bar-fill" id="barFill"></div></div>
+      <div class="prog-step" id="progStep">Initializing...</div>
+    </div>
+
+    <!-- HOME TAB: 4 MODEL RESULT CARDS -->
+    <div id="tab-home">
+      <div class="results-grid">
+
+        <div class="model-card" id="card-orig">
+          <div class="card-header">
+            <span class="card-title" style="color:#7aa3c0">Original</span>
+            <span class="card-badge" style="background:#0f2d4a;color:#5a8a9f">Baseline</span>
+          </div>
+          <div class="img-wrap">
+            <div class="img-placeholder" id="ph-orig">Upload an image to see result</div>
+            <img id="img-orig" style="display:none">
+          </div>
+          <div class="card-metrics">
+            <div class="metric"><div class="mval" style="color:#5a8a9f" id="psnr-orig">—</div><div class="mlbl">PSNR</div></div>
+            <div class="metric"><div class="mval" style="color:#5a8a9f" id="ssim-orig">—</div><div class="mlbl">SSIM</div></div>
+          </div>
+        </div>
+
+        <div class="model-card" id="card-vit">
+          <div class="card-header">
+            <span class="card-title" style="color:#34d399">Vision Transformer</span>
+            <span class="card-badge" style="background:#064e3b;color:#34d399">ViT</span>
+          </div>
+          <div class="img-wrap">
+            <div class="img-placeholder" id="ph-vit">Upload an image to see result</div>
+            <img id="img-vit" style="display:none">
+          </div>
+          <div class="card-metrics">
+            <div class="metric"><div class="mval" style="color:#34d399" id="psnr-vit">—</div><div class="mlbl">PSNR</div></div>
+            <div class="metric"><div class="mval" style="color:#34d399" id="ssim-vit">—</div><div class="mlbl">SSIM</div></div>
+          </div>
+        </div>
+
+        <div class="model-card" id="card-diff">
+          <div class="card-header">
+            <span class="card-title" style="color:#a78bfa">Diffusion Model</span>
+            <span class="card-badge" style="background:#2e1065;color:#a78bfa">DM</span>
+          </div>
+          <div class="img-wrap">
+            <div class="img-placeholder" id="ph-diff">Upload an image to see result</div>
+            <img id="img-diff" style="display:none">
+          </div>
+          <div class="card-metrics">
+            <div class="metric"><div class="mval" style="color:#a78bfa" id="psnr-diff">—</div><div class="mlbl">PSNR</div></div>
+            <div class="metric"><div class="mval" style="color:#a78bfa" id="ssim-diff">—</div><div class="mlbl">SSIM</div></div>
+          </div>
+        </div>
+
+        <div class="model-card best" id="card-comb">
+          <div class="card-header">
+            <span class="card-title" style="color:#00d4aa">ViT + Diffusion</span>
+            <span class="card-badge" style="background:#003d30;color:#00d4aa">Best</span>
+          </div>
+          <div class="img-wrap">
+            <div class="img-placeholder" id="ph-comb">Upload an image to see result</div>
+            <img id="img-comb" style="display:none">
+          </div>
+          <div class="card-metrics">
+            <div class="metric"><div class="mval" style="color:#00d4aa" id="psnr-comb">—</div><div class="mlbl">PSNR</div></div>
+            <div class="metric"><div class="mval" style="color:#00d4aa" id="ssim-comb">—</div><div class="mlbl">SSIM</div></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTTOM METRICS BAR -->
+      <div class="metrics-bar">
+        <div class="bm"><div class="bm-val" id="bm-psnr">—</div><div class="bm-lbl">Best PSNR (dB)</div></div>
+        <div class="bm"><div class="bm-val" id="bm-ssim">—</div><div class="bm-lbl">Best SSIM Score</div></div>
+        <div class="bm"><div class="bm-val" id="bm-scale">4x</div><div class="bm-lbl">Scale Factor</div></div>
+        <div class="bm"><div class="bm-val" id="bm-acc" style="color:#34d399">—</div><div class="bm-lbl">Accuracy</div></div>
+      </div>
+    </div>
+
+    <!-- ORIGINAL TAB -->
+    <div id="tab-original" class="single-tab">
+      <div class="single-header" style="background:#0b1d35;border:1px solid #0f2d4a">
+        <div class="single-title" style="color:#7aa3c0">Original Image — Baseline</div>
+        <div class="single-sub" style="color:#5a8a9f">No enhancement applied · Raw uploaded image</div>
+      </div>
+      <div class="single-compare">
+        <div class="compare-box">
+          <div class="compare-label" style="color:#5a8a9f">Input Image</div>
+          <div class="compare-img"><img id="so-orig" style="display:none"><span id="sph-orig">Upload image first</span></div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-label" style="color:#7aa3c0">Original Result</div>
+          <div class="compare-img"><img id="so-res" style="display:none"><span id="sph-orig-r">Result appears here</span></div>
+        </div>
+      </div>
+      <div class="single-metrics">
+        <div class="bm"><div class="bm-val" style="color:#5a8a9f" id="sm-psnr-orig">—</div><div class="bm-lbl">PSNR (dB)</div></div>
+        <div class="bm"><div class="bm-val" style="color:#5a8a9f" id="sm-ssim-orig">—</div><div class="bm-lbl">SSIM Score</div></div>
+        <div class="bm"><div class="bm-val" style="color:#5a8a9f" id="sm-scale-orig">—</div><div class="bm-lbl">Scale</div></div>
+      </div>
+      <div class="download-row">
+        <button class="dl-btn" style="background:#5a8a9f" onclick="download('orig')">Download Original</button>
+      </div>
+    </div>
+
+    <!-- VISION TRANSFORMER TAB -->
+    <div id="tab-vit" class="single-tab">
+      <div class="single-header" style="background:#064e3b;border:1px solid #065f46">
+        <div class="single-title" style="color:#34d399">Vision Transformer Model</div>
+        <div class="single-sub" style="color:#6ee7b7">Patch-based attention · Global feature extraction · Self-attention mechanism</div>
+      </div>
+      <div class="single-compare">
+        <div class="compare-box">
+          <div class="compare-label" style="color:#5a8a9f">Original Input</div>
+          <div class="compare-img"><img id="sv-orig" style="display:none"><span id="sph-vit-o">Upload image first</span></div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-label" style="color:#34d399">ViT Enhanced</div>
+          <div class="compare-img"><img id="sv-res" style="display:none"><span id="sph-vit-r">Result appears here</span></div>
+        </div>
+      </div>
+      <div class="single-metrics">
+        <div class="bm"><div class="bm-val" style="color:#34d399" id="sm-psnr-vit">—</div><div class="bm-lbl">PSNR (dB)</div></div>
+        <div class="bm"><div class="bm-val" style="color:#34d399" id="sm-ssim-vit">—</div><div class="bm-lbl">SSIM Score</div></div>
+        <div class="bm"><div class="bm-val" style="color:#34d399" id="sm-scale-vit">—</div><div class="bm-lbl">Scale</div></div>
+      </div>
+      <div class="download-row">
+        <button class="dl-btn" style="background:#34d399;color:#071020" onclick="download('vit')">Download ViT Enhanced</button>
+      </div>
+    </div>
+
+    <!-- DIFFUSION MODEL TAB -->
+    <div id="tab-diffusion" class="single-tab">
+      <div class="single-header" style="background:#2e1065;border:1px solid #3b0764">
+        <div class="single-title" style="color:#a78bfa">Diffusion Model</div>
+        <div class="single-sub" style="color:#c4b5fd">Denoising diffusion process · Detail recovery · T=1000 steps</div>
+      </div>
+      <div class="single-compare">
+        <div class="compare-box">
+          <div class="compare-label" style="color:#5a8a9f">Original Input</div>
+          <div class="compare-img"><img id="sd-orig" style="display:none"><span id="sph-diff-o">Upload image first</span></div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-label" style="color:#a78bfa">Diffusion Enhanced</div>
+          <div class="compare-img"><img id="sd-res" style="display:none"><span id="sph-diff-r">Result appears here</span></div>
+        </div>
+      </div>
+      <div class="single-metrics">
+        <div class="bm"><div class="bm-val" style="color:#a78bfa" id="sm-psnr-diff">—</div><div class="bm-lbl">PSNR (dB)</div></div>
+        <div class="bm"><div class="bm-val" style="color:#a78bfa" id="sm-ssim-diff">—</div><div class="bm-lbl">SSIM Score</div></div>
+        <div class="bm"><div class="bm-val" style="color:#a78bfa" id="sm-scale-diff">—</div><div class="bm-lbl">Scale</div></div>
+      </div>
+      <div class="download-row">
+        <button class="dl-btn" style="background:#a78bfa;color:#071020" onclick="download('diff')">Download Diffusion Enhanced</button>
+      </div>
+    </div>
+
+    <!-- VIT + DIFFUSION TAB -->
+    <div id="tab-combined" class="single-tab">
+      <div class="single-header" style="background:#003d30;border:1px solid #065f46">
+        <div class="single-title" style="color:#00d4aa">ViT + Diffusion — Best Result</div>
+        <div class="single-sub" style="color:#5eead4">Combined pipeline · Highest accuracy · SSIM 0.957</div>
+      </div>
+      <div class="single-compare">
+        <div class="compare-box">
+          <div class="compare-label" style="color:#5a8a9f">Original Input</div>
+          <div class="compare-img"><img id="sc-orig" style="display:none"><span id="sph-comb-o">Upload image first</span></div>
+        </div>
+        <div class="compare-box">
+          <div class="compare-label" style="color:#00d4aa">ViT + Diffusion Enhanced</div>
+          <div class="compare-img"><img id="sc-res" style="display:none"><span id="sph-comb-r">Result appears here</span></div>
+        </div>
+      </div>
+      <div class="single-metrics">
+        <div class="bm"><div class="bm-val" style="color:#00d4aa" id="sm-psnr-comb">—</div><div class="bm-lbl">PSNR (dB)</div></div>
+        <div class="bm"><div class="bm-val" style="color:#00d4aa" id="sm-ssim-comb">—</div><div class="bm-lbl">SSIM Score</div></div>
+        <div class="bm"><div class="bm-val" style="color:#00d4aa" id="sm-scale-comb">—</div><div class="bm-lbl">Scale</div></div>
+      </div>
+      <div class="download-row">
+        <button class="dl-btn" onclick="download('comb')">Download Best Enhanced</button>
+      </div>
+    </div>
+
+    <!-- COMPARE ALL TAB -->
+    <div id="tab-compare" class="single-tab">
+      <div class="compare-table">
+        <h3>All Models — Side by Side Comparison</h3>
+        <div class="cmp-grid">
+          <div class="cmp-card">
+            <div class="cmp-name" style="color:#7aa3c0">Original</div>
+            <div class="cmp-psnr" style="color:#5a8a9f" id="cmp-psnr-orig">—</div>
+            <div class="cmp-ssim" style="color:#5a8a9f" id="cmp-ssim-orig">SSIM: —</div>
+            <div class="cmp-bar-bg"><div class="cmp-bar-fill" style="background:#5a8a9f;width:0%" id="cmp-bar-orig"></div></div>
+          </div>
+          <div class="cmp-card">
+            <div class="cmp-name" style="color:#34d399">Vision Transformer</div>
+            <div class="cmp-psnr" style="color:#34d399" id="cmp-psnr-vit">—</div>
+            <div class="cmp-ssim" style="color:#34d399" id="cmp-ssim-vit">SSIM: —</div>
+            <div class="cmp-bar-bg"><div class="cmp-bar-fill" style="background:#34d399;width:0%" id="cmp-bar-vit"></div></div>
+          </div>
+          <div class="cmp-card">
+            <div class="cmp-name" style="color:#a78bfa">Diffusion Model</div>
+            <div class="cmp-psnr" style="color:#a78bfa" id="cmp-psnr-diff">—</div>
+            <div class="cmp-ssim" style="color:#a78bfa" id="cmp-ssim-diff">SSIM: —</div>
+            <div class="cmp-bar-bg"><div class="cmp-bar-fill" style="background:#a78bfa;width:0%" id="cmp-bar-diff"></div></div>
+          </div>
+          <div class="cmp-card best">
+            <div class="cmp-name" style="color:#00d4aa">ViT + Diffusion</div>
+            <div class="cmp-psnr" style="color:#00d4aa" id="cmp-psnr-comb">—</div>
+            <div class="cmp-ssim" style="color:#00d4aa" id="cmp-ssim-comb">SSIM: —</div>
+            <div class="cmp-bar-bg"><div class="cmp-bar-fill" style="background:#00d4aa;width:0%" id="cmp-bar-comb"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

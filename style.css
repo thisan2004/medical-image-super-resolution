@@ -1,0 +1,487 @@
+/* =============================================
+   Medical Image Super Resolution
+   style.css — All CSS styles
+   ============================================= */
+
+/* RESET & BASE */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0a1628;
+  color: #e2e8f0;
+  min-height: 100vh;
+}
+
+/* =============================================
+   NAVIGATION BAR
+   ============================================= */
+.navbar {
+  background: #0b1d35;
+  border-bottom: 1px solid #0f2d4a;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  height: 56px;
+  gap: 4px;
+}
+
+.logo {
+  color: #00d4aa;
+  font-size: 16px;
+  font-weight: 800;
+  margin-right: 24px;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: #e2e8f0;
+  font-weight: 400;
+}
+
+.nav-btn {
+  background: none;
+  border: none;
+  color: #7aa3c0;
+  font-size: 13px;
+  padding: 0 14px;
+  height: 56px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.nav-btn:hover {
+  color: #e2e8f0;
+}
+
+.nav-btn.active {
+  color: #00d4aa;
+  border-bottom: 2px solid #00d4aa;
+}
+
+/* =============================================
+   MAIN CONTAINER
+   ============================================= */
+.main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* =============================================
+   UPLOAD CARD
+   ============================================= */
+.upload-card {
+  background: #0b1d35;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+  border: 1px solid #0f2d4a;
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.upload-zone {
+  flex: 1;
+  border: 2px dashed #1a4060;
+  border-radius: 10px;
+  padding: 28px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.upload-zone:hover {
+  border-color: #00d4aa;
+}
+
+.upload-zone p.big {
+  color: #00d4aa;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.upload-zone p.small {
+  color: #5a8a9f;
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 170px;
+}
+
+.ctrl-label {
+  color: #5a8a9f;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 3px;
+}
+
+.ctrl-select {
+  background: #071020;
+  color: #e2e8f0;
+  border: 1px solid #1a4060;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+  width: 100%;
+}
+
+.run-btn {
+  background: #00d4aa;
+  color: #071020;
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.run-btn:hover {
+  opacity: 0.85;
+}
+
+.run-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* =============================================
+   PROGRESS BAR
+   ============================================= */
+.progress-card {
+  background: #0b1d35;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #0f2d4a;
+  display: none;
+}
+
+.prog-title {
+  color: #00d4aa;
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.bar-bg {
+  background: #071020;
+  border-radius: 99px;
+  height: 7px;
+  margin-bottom: 8px;
+}
+
+.bar-fill {
+  background: #00d4aa;
+  height: 7px;
+  border-radius: 99px;
+  width: 0%;
+  transition: width 0.35s;
+}
+
+.prog-step {
+  font-size: 12px;
+  color: #7aa3c0;
+}
+
+/* =============================================
+   4 MODEL RESULT CARDS (Home Tab)
+   ============================================= */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.model-card {
+  background: #0b1d35;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #0f2d4a;
+  transition: border-color 0.15s;
+}
+
+.model-card:hover {
+  border-color: #00d4aa55;
+}
+
+.model-card.best {
+  border: 1.5px solid #00d4aa;
+}
+
+.card-header {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #0f2d4a;
+}
+
+.card-title {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.card-badge {
+  font-size: 10px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+
+.img-wrap {
+  width: 100%;
+  aspect-ratio: 1;
+  background: #071020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.img-placeholder {
+  color: #1a4060;
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+}
+
+.card-metrics {
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-around;
+  border-top: 1px solid #0f2d4a;
+}
+
+.metric {
+  text-align: center;
+}
+
+.mval {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.mlbl {
+  font-size: 10px;
+  color: #5a8a9f;
+  margin-top: 2px;
+}
+
+/* =============================================
+   BOTTOM METRICS BAR
+   ============================================= */
+.metrics-bar {
+  background: #0b1d35;
+  border-radius: 12px;
+  padding: 16px 20px;
+  border: 1px solid #0f2d4a;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.bm {
+  background: #071020;
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.bm-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: #00d4aa;
+}
+
+.bm-lbl {
+  font-size: 11px;
+  color: #5a8a9f;
+  margin-top: 3px;
+}
+
+/* =============================================
+   SINGLE MODEL TABS
+   ============================================= */
+.single-tab {
+  display: none;
+}
+
+.single-tab.active {
+  display: block;
+}
+
+#tab-home {
+  display: block;
+}
+
+.single-header {
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.single-title {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.single-sub {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.single-compare {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.compare-box {
+  background: #0b1d35;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #0f2d4a;
+}
+
+.compare-label {
+  padding: 10px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  border-bottom: 1px solid #0f2d4a;
+}
+
+.compare-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #071020;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.compare-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.compare-placeholder {
+  color: #1a4060;
+  font-size: 13px;
+}
+
+.single-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.download-row {
+  text-align: center;
+}
+
+.dl-btn {
+  background: #00d4aa;
+  color: #071020;
+  border: none;
+  border-radius: 8px;
+  padding: 11px 28px;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.dl-btn:hover {
+  opacity: 0.85;
+}
+
+/* =============================================
+   COMPARE ALL TAB
+   ============================================= */
+.compare-table {
+  background: #0b1d35;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px solid #0f2d4a;
+}
+
+.compare-table h3 {
+  color: #00d4aa;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.cmp-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.cmp-card {
+  background: #071020;
+  border-radius: 10px;
+  padding: 14px;
+  text-align: center;
+}
+
+.cmp-card.best {
+  border: 1.5px solid #00d4aa;
+}
+
+.cmp-name {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.cmp-psnr {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 2px;
+}
+
+.cmp-ssim {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.cmp-bar-bg {
+  background: #0f2d4a;
+  border-radius: 4px;
+  height: 5px;
+  margin-top: 8px;
+}
+
+.cmp-bar-fill {
+  height: 5px;
+  border-radius: 4px;
+}
