@@ -433,9 +433,6 @@ Contributions are welcome! Please:
 
 ---
 
-## 📝 License
-
-This project is licensed under the MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -446,11 +443,8 @@ This project is for research purposes only. **Not approved for clinical use with
 ---
 
 ## 📧 Contact & Support
-
-- **Email**: your.email@example.com
-- **GitHub Issues**: [Report Issues](https://github.com/yourusername/medical-image-super-resolution/issues)
-- **Documentation**: [Full Docs](https://docs.example.com)
-
----
-
-**Made with ❤️ for Medical Imaging Research**
+.co
+-**name:s.Thisan
+- **Email**: thisanthisan70@gmail.coom
+- **GitHub Issues**: [Report Issues](https://github.com/thisan2004/medical-image-super-resolution/issues)
+  
